@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from './views/Home';
+// import VCMeeting from './containers/videoConferecing/VCMeeting';
+// import VideoConferencing from './views/VideoConferencing';
+// import Leave from './views/Leave';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        {/* <Route path='/video-conferencing' element={<VideoConferencing />} />
+        <Route path='/video-conferencing/:meetingId' element={<VCMeeting />} />
+        <Route path='/leave/:id' element={<Leave />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

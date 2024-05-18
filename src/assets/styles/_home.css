@@ -1,0 +1,10 @@
+.navbar-show {
+    opacity: 1;
+    transition: 0.2s all ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+.navbar-hide {
+    opacity: 0;
+    transition: 0.2s all ease-in-out;
+}
