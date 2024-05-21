@@ -11,7 +11,8 @@ const WithOrWithoutApiKey = ({isApiKey, apiKeyValue, handleChange, setIsApiKey, 
         display: 'flex', 
         alignItems: 'center', 
         flexDirection: 'column', 
-        width: '100%'
+        width: '100%',
+        marginTop: '48px'
     },
     textField: {
         width: '50%',
