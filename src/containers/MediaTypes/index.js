@@ -7,7 +7,7 @@ import Messaging from './Messaging';
 
 const MediaTypes = () => {
   const mediaType = useSelector(state => state.media)?.mediaType;
-
+  
   const getMediaTypeElement = () => {
     if(mediaType === VIDEO_CONFERENCING) return <VideoConferencing />
     if(mediaType === LIVE_STREAMING) return <LiveStreaming />

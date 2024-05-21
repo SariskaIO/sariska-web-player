@@ -8,12 +8,13 @@ import StyledTooltip from '../StyledTooltip';
 
 
 
-const CopyMeetingLink = ({textToCopy}) => {
+const CopyMeetingLink = ({textToCopy, color}) => {
     const useStyles = makeStyles((theme) => ({
           icon: {
             fontSize: "1.6rem !important",
             padding: "12px !important",
             marginRight: "12px",
+            fill : color ? color : 'currentColor',
             [theme.breakpoints.down("md")]: {
             marginRight: "6px !important",
             },
