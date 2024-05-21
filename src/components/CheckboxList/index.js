@@ -28,7 +28,9 @@ export default function CheckboxList({value, handleChange}) {
     <List className={classes.root}>
       {STREAMING_TYPES.map((item) => {
         const labelId = `checkbox-list-label-${item.value}`;
-
+        if(item.value === 'normal_latency'){
+          return null;
+        }
         return (
           <ListItem key={item.value} role={undefined} dense button onClick={() => handleChange(item.value)}>
             <ListItemIcon>

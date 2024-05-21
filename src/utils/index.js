@@ -131,17 +131,18 @@ export async function startStreamingInSRSMode(roomName, streamingFlag) {
     let params = {
         room_name: roomName
     };
-    if(streamingFlag.includes('normal_latency')){
+    if(!streamingFlag?.length){
         params['normal_latency'] = true;
-    }
-    if(streamingFlag.includes('is_low_latency')){
-        params['is_low_latency'] = true;
-    }
-    if(streamingFlag.includes('multi_bitrate')){
-        params['multi_bitrate'] = true;
-    }
-    if(streamingFlag.includes('is_vod')){
-        params['is_vod'] = true;
+    }else {
+        if(streamingFlag.includes('is_low_latency')){
+            params['is_low_latency'] = true;
+        }
+        if(streamingFlag.includes('multi_bitrate')){
+            params['multi_bitrate'] = true;
+        }
+        if(streamingFlag.includes('is_vod')){
+            params['is_vod'] = true;
+        }
     }
     const body = {
         method: "POST",

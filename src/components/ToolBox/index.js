@@ -514,12 +514,10 @@ const ToolBox = () => {
                 </StyledTooltip>
             </Box>
 
-            <StyledTooltip title={"Go Live"}>
                 <Box className={ classes.liveBox} onClick={ streamingUrlsArrayLength ? stopStreaming : handleOpenStreamingMenu }>          
                     {/* <FiberManualRecordIcon className={classes.dot} /> */}
                     <Button className={classes.live}>{streamingUrlsArrayLength ? 'Stop Streaming' : 'Start Streaming'}</Button>
                 </Box>
-            </StyledTooltip>
             <DialogBox 
                 open={openStreamingMenu} 
                 handleOpen={handleOpenStreamingMenu} 
