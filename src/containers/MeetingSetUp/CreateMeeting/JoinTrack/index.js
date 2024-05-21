@@ -8,13 +8,14 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { color } from "../../../../../assets/styles/_color";
-import VideoBox from "../../../../../components/VideoBox";
-import Logo from "../../../../../components/Logo";
-import StyledTooltip from "../../../../../components/StyledTooltip";
-import { localTrackMutedChanged } from "../../../../../store/actions/track";
+import { color } from "../../../../assets/styles/_color";
+import VideoBox from "../../../../components/VideoBox";
+import Logo from "../../../../components/Logo";
+import StyledTooltip from "../../../../components/StyledTooltip";
+import { localTrackMutedChanged } from "../../../../store/actions/track";
+import { VIDEO_CONFERENCING } from "../../../../constants";
 
-const JoinTrack = ({ tracks, name, toggleSettingsDrawer }) => {
+const JoinTrack = ({ tracks, name, toggleSettingsDrawer, mediaType }) => {
   const videoTrack = tracks.find((track) => track && track.isVideoTrack());
   const audioTrack = tracks.find((track) => track && track.isAudioTrack());
   const {documentHeight, documentWidth} = {documentHeight: 240, documentWidth: 320};
@@ -149,7 +150,7 @@ const JoinTrack = ({ tracks, name, toggleSettingsDrawer }) => {
           <VideoBox width={documentWidth} height={documentHeight} participantTracks={tracks} />
         </div>
       )}
-      <Box className={ classes.permissions }>
+      {mediaType === VIDEO_CONFERENCING ? <Box className={ classes.permissions }>
           {audioTrack?.isMuted() ? (
             <StyledTooltip title="Unmute Audio">
               <MicOffIcon onClick={unmuteAudioLocalTrack} />
@@ -171,7 +172,7 @@ const JoinTrack = ({ tracks, name, toggleSettingsDrawer }) => {
           <StyledTooltip title="Settings">
             <SettingsIcon onClick={toggleSettingsDrawer("right", true)} />
           </StyledTooltip>
-        </Box>
+        </Box> : null}
     </div>
   );
 };

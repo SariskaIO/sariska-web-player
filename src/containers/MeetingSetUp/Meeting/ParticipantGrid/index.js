@@ -1,26 +1,29 @@
 
 
-import React from 'react';
-import { Box, makeStyles, Grid, Typography, Hidden } from '@material-ui/core'
+import React, { useEffect, useRef } from 'react';
+import { Box, makeStyles, Grid } from '@material-ui/core'
 import { useSelector } from "react-redux";
 import CloseIcon from '@material-ui/icons/Close';
-import VideoBox from "../../../../../components/VideoBox";
-import { calculateRowsAndColumns, getAllParticipants, getLeftTop, isMobileOrTab } from "../../../../../utils";
-import DrawerBox from '../../../../../components/DrawerBox';
-import { color } from '../../../../../assets/styles/_color';
-import { PARTICIPANTS_VISIBLE_ON_MOBILE } from '../../../../../constants';
+import VideoBox from "../../../../components/VideoBox";
+import { calculateRowsAndColumns, getLeftTop, isMobileOrTab, getRealParticipants} from "../../../../utils";
+import DrawerBox from '../../../../components/DrawerBox';
+import { color } from '../../../../assets/styles/_color';
+import { LIVE_STREAMING, PARTICIPANTS_VISIBLE_ON_MOBILE, VIDEO_CONFERENCING } from '../../../../constants';
+import StreamingUrls from '../../../MediaTypes/LiveStreaming/StreamingUrls';
+import StreamingPlayer from '../../../MediaTypes/LiveStreaming/StreamingPlayer';
 
 const ParticipantGrid = ({ dominantSpeakerId }) => {
     const [participantState, setParticipantState] = React.useState({
         right: false,
       });
     const layout = useSelector(state => state.layout);
+
     const useStyles = makeStyles((theme) => ({
         root: {
             justifyContent: "center",
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center"
+            flexDirection: "column",
+           // alignItems: "center"
         },
         container: {
             position: "relative",
@@ -54,16 +57,18 @@ const ParticipantGrid = ({ dominantSpeakerId }) => {
         }
     }));
     const classes = useStyles();
+    const focusRef = useRef(null);
     const conference = useSelector(state => state.conference);
     const localTracks = useSelector(state => state.localTrack);
     const remoteTracks = useSelector(state => state.remoteTrack);
+    const mediaType = useSelector(state => state.media)?.mediaType;
     const localUser = conference.getLocalUser();
-    const participants = getAllParticipants(conference, layout);
+    const participants = getRealParticipants(conference, layout);
     // all participants 
     const tracks = { ...remoteTracks, [localUser.id]: localTracks };
     // all tracks
     
-    let { viewportWidth, viewportHeight } = {viewportWidth: '100%', viewportHeight: '500px'};
+    let { viewportWidth, viewportHeight } = {viewportWidth: '100%', viewportHeight: mediaType === VIDEO_CONFERENCING ? '500px' : '240px'};
 
     const {
         rows,
@@ -96,8 +101,14 @@ const ParticipantGrid = ({ dominantSpeakerId }) => {
         setParticipantState({ ...participantState, [anchor]: open });
         };
         
+        useEffect(()=>{
+            if (focusRef.current) {
+                focusRef.current.focus();
+              }
+        },[])
+    
     return (
-        <Box className={classes.root}>
+        <Box className={classes.root} ref={focusRef} tabIndex={-1} >
             <Grid className={classes.container} style={{ height: viewportHeight, width: viewportWidth }} container item>
                 {[...Array(rows)].map((x, i) =>
                     <>
@@ -126,6 +137,11 @@ const ParticipantGrid = ({ dominantSpeakerId }) => {
                     </>
                 )}
             </Grid>
+            {
+                mediaType === LIVE_STREAMING ? 
+                    <StreamingUrls />
+                : null
+            }
         </Box>
     );
 }

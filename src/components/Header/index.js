@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import { setMediaType } from '../../store/actions/media';
 import { removeLocalTrack } from '../../store/actions/track';
+import { LIVE_STREAMING, VIDEO_CONFERENCING } from '../../constants';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,10 +32,13 @@ const useStyles = makeStyles(theme => ({
     }
   },
   back: {
-    color: color.white,
-    borderColor: color.white,
+    color: color.primaryLight,
+    borderColor: color.primaryLight,
     textTransform: 'capitalize',
     borderRadius: '20px',
+    marginLeft: '24px', 
+    fontSize: '2rem', 
+    lineHeight: 1,
     '&:hover': {
       opacity: 0.8
     }
@@ -58,18 +62,57 @@ const Header = () => {
     }
     dispatch(setMediaType(null))
   }
+
+  const getTitle = () => {
+    let title;
+    switch(mediaType){
+      case VIDEO_CONFERENCING:
+        title = 'Video Conferencing';
+        break;
+      case LIVE_STREAMING:
+        title = 'Interactive Live Streaming';
+        break;
+      default:
+        title = 'Sariska Web Player';
+    }
+    return title;
+  }
+  
+
+  // useEffect(() => {
+    
+  //   setTitle(getTitle());
+  // }, [mediaType])
+  
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} style={{justifyContent: mediaType ? 'space-between' : 'inherit'}}>
         <Logo />
-        <Box className={classes.titleContainer}>
+        {!mediaType ? <Box className={classes.titleContainer}>
             <Typography variant='h3' className={classes.title}>
-              Sariska Web Player
+              {getTitle()}
             </Typography>
-        </Box>
-        {mediaType && !isMeetingStarted ? <Button className={classes.back} variant= 'outlined' onClick={goBack} >
+        </Box> : null}
+        {/* {!isMeetingStarted && mediaType  ? <Button className={classes.back} variant= 'outlined' onClick={goBack} >
           <ArrowBackIosOutlinedIcon  className={classes.backIcon} />
           <Typography>Back</Typography>
-        </Button> : null}
+        </Button> : null} */}
+        {
+          mediaType ?
+          <Box sx={{display: 'flex'}}>
+              <Typography variant='h5' className={classes.title} style={{textAlign: 'end'}}>
+                {getTitle()}
+              </Typography>
+              {
+                !isMeetingStarted  ? 
+                <Button className={classes.back} variant= 'outlined' onClick={goBack} >
+                  <ArrowBackIosOutlinedIcon  className={classes.backIcon} />
+                  <Typography>Back</Typography>
+                </Button> 
+                : null
+              }
+          </Box> 
+          : null
+        }
     </Box>
   )
 }

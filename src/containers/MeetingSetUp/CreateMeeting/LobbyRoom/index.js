@@ -9,27 +9,28 @@ import { makeStyles } from "@material-ui/core";
 import React, { useEffect, useState, useRef } from "react";
 import SariskaMediaTransport from "sariska-media-transport";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addConference } from "../../../../../store/actions/conference";
+import { addConference } from "../../../../store/actions/conference";
 import {
   getToken,
   trimSpace,
   getRandomColor
-} from "../../../../../utils";
-import { addThumbnailColor } from "../../../../../store/actions/color";
+} from "../../../../utils";
+import { addThumbnailColor } from "../../../../store/actions/color";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import TextInput from "../../../../../components/TextInput";
-import { setProfile, setMeeting , updateProfile} from "../../../../../store/actions/profile";
+import TextInput from "../../../../components/TextInput";
+import { setProfile, setMeeting , updateProfile} from "../../../../store/actions/profile";
 import JoinTrack from "../JoinTrack";
-import { addConnection } from "../../../../../store/actions/connection";
-import SnackbarBox from "../../../../../components/Snackbar";
-import { showNotification } from "../../../../../store/actions/notification";
-import { setDisconnected } from "../../../../../store/actions/layout";
-import FancyButton from '../../../../../components/FancyButton';
-import { color } from "../../../../../assets/styles/_color";
-import { setIsMeetingStarted } from "../../../../../store/actions/auth";
-import SettingsBox from "../../../../../components/Settings";
-import DrawerBox from "../../../../../components/DrawerBox";
+import { addConnection } from "../../../../store/actions/connection";
+import SnackbarBox from "../../../../components/Snackbar";
+import { showNotification } from "../../../../store/actions/notification";
+import { setDisconnected } from "../../../../store/actions/layout";
+import FancyButton from '../../../../components/FancyButton';
+import { color } from "../../../../assets/styles/_color";
+import { setIsMeetingStarted } from "../../../../store/actions/auth";
+import SettingsBox from "../../../../components/Settings";
+import DrawerBox from "../../../../components/DrawerBox";
+import { VIDEO_CONFERENCING } from "../../../../constants";
 
 
 const LobbyRoom = ({ tracks }) => {
@@ -48,6 +49,7 @@ const LobbyRoom = ({ tracks }) => {
   const iAmRecorder = window.location.hash.indexOf("iAmRecorder") >= 0;
   const testMode = window.location.hash.indexOf("testMode") >= 0;
   const notification = useSelector((state) => state.notification);
+  const mediaType = useSelector((state) => state.media)?.mediaType;
   const auth = useSelector(state => state.auth);
   const {apiKey, isApiKey} = auth;
   const [settingsState, setSettingsState] = React.useState({
@@ -393,7 +395,7 @@ const LobbyRoom = ({ tracks }) => {
               />
               </> : 
               null}
-             <Box className={classes.userBox}>
+             {mediaType === VIDEO_CONFERENCING ? <Box className={classes.userBox}>
                 <TextInput
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
@@ -407,7 +409,7 @@ const LobbyRoom = ({ tracks }) => {
                   onChange={handleUserNameChange}
                   variant={'standard'}
                 />
-              </Box>
+              </Box> : null}
             </Box>
             
           </div>
@@ -425,7 +427,7 @@ const LobbyRoom = ({ tracks }) => {
             </Box>
       </Box>
 
-      <JoinTrack tracks={tracks} name={name} toggleSettingsDrawer={toggleSettingsDrawer}/>
+      <JoinTrack tracks={tracks} name={name} toggleSettingsDrawer={toggleSettingsDrawer} mediaType={mediaType}/>
       <DrawerBox
         open={settingsState["right"]}
         onClose={toggleSettingsDrawer("right", false)}

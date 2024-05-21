@@ -4,7 +4,9 @@ import {
   SET_RESOLUTION,
   SET_SPEAKER,
   SET_DEVICES,
-  SET_MEDIA_TYPE
+  SET_MEDIA_TYPE,
+  SET_STREAMING_URLS,
+  SET_STREAMING_TYPES
 } from "../actions/types";
 
 const initialState = {
@@ -14,7 +16,9 @@ const initialState = {
   devices: null,
   resolution: 720,
   aspectRatio: 16/9,
-  mediaType: ""
+  mediaType: "",
+  streamingTypes: ['normal_latency'],
+  streamingUrls: {}
 };
 
 export const media = (state = initialState, action) => {
@@ -47,6 +51,16 @@ export const media = (state = initialState, action) => {
       };
     case SET_MEDIA_TYPE:
       state.mediaType = action.payload;
+      return {
+        ...state
+      }
+    case SET_STREAMING_TYPES:
+      state.streamingTypes = [...action.payload];
+      return {
+        ...state
+      }
+    case SET_STREAMING_URLS:
+      state.streamingUrls = {...action.payload};
       return {
         ...state
       }

@@ -1,0 +1,160 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f6ad55;
+}
+
+/* Override Tailwind utility classes with CSS variables */
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-bg {
+    background-color: var(--secondary-color);
+}
+
+/* Additional custom styling */
+.card {
+    border: 1px solid var(--primary-color);
+    padding: 1rem;
+}
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+
+
+#video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.viewer-count {
+    left: 232px;
+    bottom: 295px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: max-content;
+}
+
+#hlsUrlInput {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+#player_container video{
+    border-radius: 8px;
+}
+
+/* Media queries for mobile */
+@media screen and (max-width: 767px) {
+    #hlsUrlInput {
+        width: 100%;
+    }
+    #video {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+       margin: 0 auto;
+        display: block;
+
+    }
+    .mediaContainer {
+        width: 100%;
+    }
+
+    .chatContainer {
+        width: 100%;
+    }
+
+    .btn-container button {
+        width: 100%;
+        margin-bottom: 10px; /* optional: adds space between buttons on mobile */
+        width: 200px;
+    }
+
+    .chatContainer > #online-container {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+
+    .chatContainer > #chat-container > div {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+}
+
+.video {
+    position: relative;
+}
+/* Media queries for tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    #hlsUrlInput {
+        width: 100%;
+    }
+    #video {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+    }
+    .mediaContainer {
+        width: 100%;
+    }
+
+    .chatContainer {
+        width: 100%;
+    }
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn-container button {
+        margin-bottom: 10px;
+        width: 200px;
+    }
+
+    .chatContainer > #online-contaeiner {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .chatContainer > #chat-container > div {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+}
+
+.mediaBarContainer { 
+    display: flex;
+}
+/* Media queries for desktop */
+@media screen and (min-width: 1024px) {
+    #hlsUrlInput {
+        width: 100%;
+    }
+
+    .mediaContainer {
+        width: 60%;
+    }
+
+    .chatContainer {
+        width: 100%;
+    }
+    .mainContainer {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-evenly;
+    }
+}

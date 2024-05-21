@@ -64,7 +64,7 @@ export function createDeferred() {
     return deferred;
 }
 
-export async function getToken(profile, name, avatarColor, isApiKey, apiKey) {
+export async function getToken(profile, name, avatarColor, isApiKey, apiKey, id) {
     const body = {
         method: "POST",
         headers: {
@@ -75,7 +75,8 @@ export async function getToken(profile, name, avatarColor, isApiKey, apiKey) {
             user: {
                 avatar: avatarColor,
                 name: name,
-                email: profile.email
+                email: profile.email,
+                id: id
             },
             exp: "48 hours"
         })
@@ -130,13 +131,16 @@ export async function startStreamingInSRSMode(roomName, streamingFlag) {
     let params = {
         room_name: roomName
     };
-    if(streamingFlag === 'is_low_latency'){
+    if(streamingFlag.includes('normal_latency')){
+        params['normal_latency'] = true;
+    }
+    if(streamingFlag.includes('is_low_latency')){
         params['is_low_latency'] = true;
     }
-    if(streamingFlag === 'multi_bitrate'){
+    if(streamingFlag.includes('multi_bitrate')){
         params['multi_bitrate'] = true;
     }
-    if(streamingFlag === 'is_vod'){
+    if(streamingFlag.includes('is_vod')){
         params['is_vod'] = true;
     }
     const body = {
@@ -206,7 +210,6 @@ export function isSquare  (n) {
 export function  calculateSteamHeightAndExtraDiff(viewportWidth, viewportHeight, documentWidth, documentHeight, isPresenter, isActiveSpeaker)  {
     let videoStreamHeight = viewportHeight, videoStreamDiff = 0;
     if (isPresenter) {
-        console.log('isPresenter')
         return {videoStreamHeight: viewportHeight, videoStreamDiff: 0};
     }
     if ( viewportWidth > documentWidth) {
@@ -517,13 +520,13 @@ export function isURL(str) {
 }
 
 // Function to load video
-export function loadVideo(url) {
+export function loadVideo(url, isPlay) {
     var storedUrl = document.getElementById('hlsUrlInput').value || localStorage.getItem('hlsUrl')
     if (storedUrl) {
         document.getElementById('hlsUrlInput').value = storedUrl;
-        localStorage.setItem('hlsUrl', storedUrl)
+        localStorage.setItem('hlsUrl', storedUrl);
     }
-
+    
     let player = OvenPlayer.create("player_container", {
             autoStart: true,
             sources: [{
@@ -746,7 +749,11 @@ export async function apiCall(path, method, body = {}, headers = {}, loader=fals
     if(!conference) return [];
     const participants = getAllParticipants(conference, layout);
     if(participants?.length){
-        return participants?.filter(participant => !participant.presenter)
+        return participants?.filter(function(participant) {
+            if(participant.presenter) return true; 
+            if(participant._statsID === "gst-meet" ) return false;
+            return true;
+        })
     }else{
         return []
     }

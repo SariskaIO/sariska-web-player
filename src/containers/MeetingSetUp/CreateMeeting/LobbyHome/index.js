@@ -2,18 +2,20 @@ import { Box, Grid } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setDevices } from '../../../../../store/actions/media';
-import { addLocalTrack } from '../../../../../store/actions/track';
+import { setDevices } from '../../../../store/actions/media';
+import { addLocalTrack } from '../../../../store/actions/track';
 import SariskaMediaTransport from "sariska-media-transport";
 import LobbyRoom from '../LobbyRoom';
 import { useNavigate } from 'react-router-dom';
-import { color } from '../../../../../assets/styles/_color';
+import { color } from '../../../../assets/styles/_color';
+import Title from '../../../../components/Title';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        flexDirection: 'column',
         color: "white",
         marginTop: '16px',
         width: '100%',
@@ -89,6 +91,7 @@ const LobbyHome = ({link}) => {
 
   return (
     <Box className={classes.root}>
+            <Title title={'Create a Meeting'} isDivider={false} />
             <Grid className={classes.gridContainer} container>
                 <Grid item md={12} className={classes.gridChild}>
                     <Box >
