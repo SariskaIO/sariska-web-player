@@ -35,6 +35,7 @@
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",
     "build": "env-cmd -f .env react-scripts build",
+    "deploy": "aws s3 cp build s3://player.sariska.io --recursive --acl public-read && aws cloudfront create-invalidation --distribution-id E1GRXFRGU0YZ42 --paths / /bundle.js /index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
