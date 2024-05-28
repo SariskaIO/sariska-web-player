@@ -6,8 +6,10 @@ import { updateProfile } from '../../store/actions/profile';
 import video from '../../assets/images/Video.svg';
 import streaming from '../../assets/images/Streaming.svg';
 import messaging from '../../assets/images/Messaging.svg';
+import cobrowsing from '../../assets/images/Cobrowsing.svg';
+
 import { setApiKey } from '../../store/actions/auth';
-import { LIVE_STREAMING, MESSAGING, VIDEO_CONFERENCING } from '../../constants';
+import { LIVE_STREAMING, MESSAGING, VIDEO_CONFERENCING, CO_BROWSING } from '../../constants';
 import MediaSetUp from '../../containers/MediaSetUp';
 import MediaTypes from '../../containers/MediaTypes';
 
@@ -95,5 +97,14 @@ const list = [
         to: '/messaging',
         src: messaging,
         mediaType: MESSAGING
+    },
+    {
+        id: 4,
+        alt: 'Co Browsing',
+        ml: '32px',
+        title: <>Co Browsing</>,
+        to: '/co-browsing',
+        src: cobrowsing,
+        mediaType: CO_BROWSING
     }
 ]

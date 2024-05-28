@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { color } from '../../../assets/styles/_color';
 import { useDispatch } from 'react-redux';
 import { setMediaType } from '../../../store/actions/media';
+import { CO_BROWSING } from '../../../constants';
 
 
 const MediaLinks = ({isApiKey, list, apiKeyValue, setError}) => {
@@ -85,7 +86,7 @@ const MediaLinks = ({isApiKey, list, apiKeyValue, setError}) => {
                             >
                             <Box 
                                 className={classes.cardBox}>
-                                <img src={item.src} alt={item.title} width={60} height={60} />
+                                <img src={item.src} alt={item.title} width={ item.mediaType === CO_BROWSING ? 120 : 60 } height={60} />
                                 <Typography className={classes.title}>{item.title}</Typography>
                             </Box>
                             </Box>

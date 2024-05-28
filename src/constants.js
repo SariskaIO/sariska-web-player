@@ -46,6 +46,7 @@ export const WHITEBOARD = "WHITEBOARD";
 export const VIDEO_CONFERENCING = "VIDEO_CONFERENCING";
 export const LIVE_STREAMING = "LIVE_STREAMING";
 export const MESSAGING = "MESSAGING";
+export const CO_BROWSING = 'CO_BROWSING';
 
 export const images = [
     {
