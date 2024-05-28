@@ -16,6 +16,7 @@ import { EXIT_FULL_SCREEN_MODE } from "../../constants";
 import { audioIndicator } from "./audioIndicator";
 import { subtitle } from "./subtitle";
 import { auth } from "./auth";
+import { theme } from "./theme";
 
 export const appReducer = combineReducers({
     audioIndicator,
@@ -32,7 +33,8 @@ export const appReducer = combineReducers({
     notification,
     snackbar,
     subtitle,
-    auth
+    auth,
+    theme
 });
 
 export const rootReducer = (state, action) => {

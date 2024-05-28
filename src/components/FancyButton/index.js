@@ -2,10 +2,10 @@ import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { color } from "../../assets/styles/_color";
+import useColor from "../../hooks/useColor";
 
 const FancyButton = ({disabled, onClick, buttonText, width, top, homeButton, fontSize}) => {
-
+const color = useColor();
 const useStyles = makeStyles((theme) => ({
   anchor: {
     color: color.white,

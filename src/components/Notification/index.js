@@ -1,7 +1,9 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
-import { color } from '../../assets/styles/_color';
+import useColor from '../../hooks/useColor';
 
+const Notification = ({snackbar}) => {
+const color = useColor();
 const useStyles = makeStyles(()=>({
     root: {
         position: "absolute",
@@ -10,14 +12,11 @@ const useStyles = makeStyles(()=>({
         display: "flex",
         left: "100px",
         bottom: "50px",
-        background: "grey",
+        background: color.primaryLight,
         height: "50px",
         paddingLeft: "20px",
         paddingRight: "20px"
     }}));
-
-
-const Notification = ({snackbar}) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     

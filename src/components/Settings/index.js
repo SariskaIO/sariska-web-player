@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SpeakerIcon from "@material-ui/icons/Speaker";
 import VideocamIcon from "@material-ui/icons/Videocam";
-import { color } from "../../assets/styles/_color";
 import SelectField from "../SelectField";
 import SariskaMediaTransport from "sariska-media-transport";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +19,7 @@ import Video from "../Video";
 import MicIndicator from "../MicIndicator";
 import { Box, Button, Grid, Hidden, Tab, Tabs, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
+import useColor from "../../hooks/useColor";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,187 +48,192 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: theme.spacing(0),
-  },
-  root: {
-    flexGrow: 1,
-    backgroundColor: color.secondary,
-  },
-  tabs: {
-    padding: "8px 0px 8px 0px",
-    "&>div>span": {
-      display: "none",
+
+
+const SettingsBox = ({ tracks, onClick }) => {
+  const color = useColor();
+  const colorTheme = useSelector(state => state.theme)?.theme;
+  const useStyles = makeStyles((theme) => ({
+    container: {
+      padding: theme.spacing(0),
     },
-    "& .MuiTabs-scrollable": {
-      overflowX: 'hidden'
+    root: {
+      flexGrow: 1,
+      backgroundColor: colorTheme === 'dark' ? color.secondary : color.whiteEEE
     },
-    "& .MuiTabScrollButton-root": {
-      display: 'none'
-    }
-  },
-  tab: {
-    height: "36px",
-    minHeight: "36px",
-    padding: "0px 20px",
-    minWidth: "56px",
-    border: `1px solid ${color.primaryLight}`,
-    borderRadius: "10px",
-    color: "#fff",
-    [theme.breakpoints.down("sm")]: {
-      padding: "6px 18px",
-    },
-    "& .MuiTab-wrapper": {
-      alignItems: "flex-start",
-    },
-    "&.Mui-selected": {
-      background: color.mainGradient,
-      border: `none`,
-      padding: "0px 21px",
-      "& svg": {
-        color: color.white,
+    tabs: {
+      padding: "8px 0px 8px 0px",
+      "&>div>span": {
+        display: "none",
       },
-      "& p": {
-        color: color.white,
+      "& .MuiTabs-scrollable": {
+        overflowX: 'hidden'
       },
-      [theme.breakpoints.down("sm")]: {
-        padding: "7px 19px",
+      "& .MuiTabScrollButton-root": {
+        display: 'none'
       }
     },
-    "&:hover": {
-      fontWeight: "900",
-      background: color.mainGradient,
-      border: 'none',
-      padding: "0px 21px",
+    tab: {
+      height: "36px",
+      minHeight: "36px",
+      padding: "0px 20px",
+      minWidth: "56px",
+      border: `1px solid ${color.primaryLight}`,
+      borderRadius: "10px",
+      color: color.white,
       [theme.breakpoints.down("sm")]: {
-        padding: "7px 19px",
-      }
+        padding: "6px 18px",
+      },
+      "& .MuiTab-wrapper": {
+        alignItems: "flex-start",
+      },
+      "&.Mui-selected": {
+        background: color.mainGradient,
+        border: `none`,
+        padding: "0px 21px",
+        "& svg": {
+          color: color.white,
+        },
+        "& p": {
+          color: color.white,
+        },
+        [theme.breakpoints.down("sm")]: {
+          padding: "7px 19px",
+        }
+      },
+      "&:hover": {
+        fontWeight: "900",
+        background: color.mainGradient,
+        border: 'none',
+        padding: "0px 21px",
+        [theme.breakpoints.down("sm")]: {
+          padding: "7px 19px",
+        }
+      },
     },
-  },
-  setting: {
-    padding: theme.spacing(0, 0, 3, 0),
-    color: color.white,
-    marginBottom: '16px',
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(0,0,3,0),
+    setting: {
+      padding: theme.spacing(0, 0, 3, 0),
+      color: color.white,
+      marginBottom: '16px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-    }
-  },
-  title: {
-    color: color.white,
-    fontWeight: "400",
-    fontSize: "28px",
-    lineHeight: "1",
-    marginLeft: theme.spacing(1),
-    //marginBottom: theme.spacing(2),
-        [theme.breakpoints.down("sm")]: {
-          fontSize: '24px'
+      '& svg': {
+        '&:hover': {
+          cursor: 'pointer'
+        }
       }
-  },
-  marginBottom: {
-    marginBottom: theme.spacing(2),
-  },
-  label: {
-    display: "flex",
-    alignItems: "center",
-    padding: "2px 14px",
-    textTransform: "capitalize",
-  },
-  audioIcon: {
-    paddingLeft: "0px",
-    marginRight: "15px",
-  },
-  videoIcon: {
-    marginRight: "13px",
-    fontSize: "2rem",
-  },
-  audioText: {
-    paddingTop: "2px",
-  },
-  videoText: {
-    paddingTop: "2px",
-  },
-  list: {
-    padding: theme.spacing(3, 0),
-    "&>li>div": {
-      "&>span": {
+    },
+    title: {
+      color: color.white,
+      fontWeight: "400",
+      fontSize: "28px",
+      lineHeight: "1",
+      marginLeft: theme.spacing(1),
+      //marginBottom: theme.spacing(2),
+          [theme.breakpoints.down("sm")]: {
+            fontSize: '24px'
+        }
+    },
+    marginBottom: {
+      marginBottom: theme.spacing(2),
+    },
+    label: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2px 14px",
+      textTransform: "capitalize",
+    },
+    audioIcon: {
+      paddingLeft: "0px",
+      marginRight: "15px",
+    },
+    videoIcon: {
+      marginRight: "13px",
+      fontSize: "2rem",
+    },
+    audioText: {
+      paddingTop: "2px",
+    },
+    videoText: {
+      paddingTop: "2px",
+    },
+    list: {
+      padding: theme.spacing(3, 0),
+      "&>li>div": {
+        "&>span": {
+          fontSize: "0.9rem",
+        },
+        "&&>p": {
+          fontSize: "0.9rem",
+        },
+      },
+    },
+    display: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    microphone: {
+      color: color.white,
+      display: "flex",
+      alignItems: "center",
+      marginBottom: "5px",
+      paddingRight: "3px",
+      paddingLeft: "15px",
+    },
+    offButton: {
+      padding: "4px 2px 4px 10px",
+      fontSize: "0.875rem",
+      color: "#fff",
+      borderRadius: "0px",
+      textTransform: "capitalize",
+    },
+    volume: {
+      color: color.white,
+      border: color.white,
+      textTransform: "capitalize",
+      paddingLeft: "10px",
+      marginTop: "23px",
+      marginLeft: '5px',
+      "&:hover": {
+        opacity: "0.6",
+        background: color.lightgray4,
+      },
+    },
+    test: {
+      marginLeft: "10px",
+    },
+    videoWrapper: {
+      "& > div": {
+        borderRadius: 0,
+      },
+      "& .rightControls": {
+        display: "none",
+      },
+      "& .userDetails": {
+        display: "none",
+      },
+      "& .audioBox": {
+        display: "none",
+      },
+    },
+    muted: {
+      color: color.white,
+      width: "310px",
+      height: "200px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: color.secondaryDark,
+      borderRadius: "8px",
+      marginTop: "28px",
+      "& p": {
         fontSize: "0.9rem",
       },
-      "&&>p": {
-        fontSize: "0.9rem",
-      },
     },
-  },
-  display: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  microphone: {
-    color: "#fff",
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "5px",
-    paddingRight: "3px",
-    paddingLeft: "15px",
-  },
-  offButton: {
-    padding: "4px 2px 4px 10px",
-    fontSize: "0.875rem",
-    color: "#fff",
-    borderRadius: "0px",
-    textTransform: "capitalize",
-  },
-  volume: {
-    color: color.white,
-    border: color.white,
-    textTransform: "capitalize",
-    paddingLeft: "10px",
-    marginTop: "23px",
-    marginLeft: '5px',
-    "&:hover": {
-      opacity: "0.6",
-      background: color.lightgray4,
-    },
-  },
-  test: {
-    marginLeft: "10px",
-  },
-  videoWrapper: {
-    "& > div": {
-      borderRadius: 0,
-    },
-    "& .rightControls": {
-      display: "none",
-    },
-    "& .userDetails": {
-      display: "none",
-    },
-    "& .audioBox": {
-      display: "none",
-    },
-  },
-  muted: {
-    color: color.white,
-    width: "310px",
-    height: "200px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: color.secondaryDark,
-    borderRadius: "8px",
-    marginTop: "28px",
-    "& p": {
-      fontSize: "0.9rem",
-    },
-  },
-}));
-
-const SettingsBox = ({ tracks, onClick }) => {
+  }));
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const devices = useSelector(state=>state?.media?.devices);
@@ -518,10 +523,8 @@ const SettingsBox = ({ tracks, onClick }) => {
     <Grid container className={classes.container}>
       <Grid item xs={12}>
         <Box className={classes.setting}>
-        <Typography className={classes.title}>Settings</Typography>
-        <Hidden mdUp>
+          <Typography className={classes.title}>Settings</Typography>
           <CloseIcon onClick={onClick}/>
-        </Hidden>
         </Box>
       </Grid>
       <Grid item md={12} className={classes.root}>

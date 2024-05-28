@@ -1,47 +1,48 @@
 import React from 'react';
-import { color } from '../../assets/styles/_color';
 import { makeStyles } from '@material-ui/core';
+import useColor from '../../hooks/useColor';
 const AUDIO_LEVEL_DOTS = 5;
 const CENTER_DOT_INDEX = Math.floor(AUDIO_LEVEL_DOTS / 2);
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        position: "absolute",
-        lineHeight: "1.4px",
-        display: "inline-block",
-        left: "6px",
-        top: "50%",
-        marginTop: "-17px",
-        width: "6px",
-        height: "35px",
-        zIndex: 2,
-        border: "none",
-        "& .audiodot-top, .audiodot-bottom, .audiodot-middle ": {
-            opacity: 0,
-            display: "inline-block",
-            width: "5px",
-            lineHeight: "1px",
-            height: "5px",
-            borderRadius: "50%",
-            background:  color.primaryLight,
-            margin: "1px 0 1px 0",
-            transition: "opacity .25s ease-in-out",
-            "-moz-transition": "opacity .25s ease-in-out"
-        },
-        "& span.audiodot-top::after, span.audiodot-bottom::after, span.audiodot-middle::after": {
-            content: "",
-            display: "inline-block",
-            width: "5px",
-            height: "5px",
-            borderRadius: "50%",
-            "-webkit-filter": "blur(.5px)",
-            filter: "blur(.5px)",
-            background: color.primaryLight,
-        }
-    }
-}));
 
 const AudioLevelIndicator = ({passedAudioLevel}) => {
+    const color = useColor();
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            position: "absolute",
+            lineHeight: "1.4px",
+            display: "inline-block",
+            left: "6px",
+            top: "50%",
+            marginTop: "-17px",
+            width: "6px",
+            height: "35px",
+            zIndex: 2,
+            border: "none",
+            "& .audiodot-top, .audiodot-bottom, .audiodot-middle ": {
+                opacity: 0,
+                display: "inline-block",
+                width: "5px",
+                lineHeight: "1px",
+                height: "5px",
+                borderRadius: "50%",
+                background:  color.primaryLight,
+                margin: "1px 0 1px 0",
+                transition: "opacity .25s ease-in-out",
+                "-moz-transition": "opacity .25s ease-in-out"
+            },
+            "& span.audiodot-top::after, span.audiodot-bottom::after, span.audiodot-middle::after": {
+                content: "",
+                display: "inline-block",
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                "-webkit-filter": "blur(.5px)",
+                filter: "blur(.5px)",
+                background: color.primaryLight,
+            }
+        }
+    }));
     const classes  = useStyles();
     const audioLevel = typeof passedAudioLevel === 'number' && !isNaN(passedAudioLevel)
         ? Math.min(passedAudioLevel * 1.2, 1) : 0;

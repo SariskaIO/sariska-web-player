@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom';
-import { color } from '../../../assets/styles/_color';
 import { useDispatch } from 'react-redux';
 import { setMediaType } from '../../../store/actions/media';
+import useColor from '../../../hooks/useColor';
 
 
 const MediaLinks = ({isApiKey, list, apiKeyValue, setError}) => {
-
+    const color = useColor();
     const useStyles = makeStyles((theme)=>({
         linkContainer: {
             display: 'flex', 

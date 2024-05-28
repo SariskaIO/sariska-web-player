@@ -1,16 +1,10 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import React from 'react'
 import LobbyHome from './LobbyHome';
 
 const CreateMeeting = () => {
-    const useStyles = makeStyles(theme => ({
-        root: {
-
-        }
-    }))
-    const classes = useStyles();
   return (
-    <Box className={classes.root}>
+    <Box >
         <LobbyHome />
     </Box>
   )

@@ -1,9 +1,13 @@
 import React from 'react';
-import { color } from '../../assets/styles/_color';
 import { makeStyles } from '@material-ui/core';
+import useColor from '../../hooks/useColor';
 const AUDIO_LEVEL_DOTS = 5;
 const CENTER_DOT_INDEX = Math.floor(AUDIO_LEVEL_DOTS / 2);
 
+
+const MicIndicator = ({vol}) => {
+
+    const color = useColor();
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
@@ -28,8 +32,6 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-block"
     }
 }));
-
-const MicIndicator = ({vol}) => {
     const classes  =  useStyles();
     const allPids = ["#718EFF", "#6a86f5", "#7d73ff", "#7268fa", "#685cf9", "#7b05f8","#2010f9"];
     const numberOfPidsToColor = Math.round(vol / 10);

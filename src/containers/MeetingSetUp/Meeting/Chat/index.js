@@ -15,11 +15,13 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import SendIcon from "@material-ui/icons/Send";
-import {color} from "../../../../assets/styles/_color";
 import { encodeHTML, formatAMPM, linkify } from "../../../../utils";		
 import MediaChat from "../../../../components/MediaChat";
 import FileAttached from "../../../../components/FileAttached";
+import useColor from "../../../../hooks/useColor";
 
+const ChatPanel = () => {
+    const color = useColor();
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -136,8 +138,6 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
-
-const ChatPanel = () => {
     const classes = useStyles();
     const conference = useSelector((state) => state.conference);
     const messages = useSelector((state) => state.message);

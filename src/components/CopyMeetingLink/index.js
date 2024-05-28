@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {color} from '../../assets/styles/_color';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/actions/notification';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import StyledTooltip from '../StyledTooltip';
 
 
 
-const CopyMeetingLink = ({textToCopy, color}) => {
+const CopyMeetingLink = ({textToCopy, color, isBorder}) => {
     const useStyles = makeStyles((theme) => ({
           icon: {
             fontSize: "1.6rem !important",
             padding: "12px !important",
             marginRight: "12px",
+            border: isBorder ? 'inherit' : 'none !important',
             fill : color ? color : 'currentColor',
             [theme.breakpoints.down("md")]: {
             marginRight: "6px !important",
@@ -36,7 +36,7 @@ const CopyMeetingLink = ({textToCopy, color}) => {
 
     return (
 
-        <StyledTooltip title={"Click to Copy Meeting Title"}>
+        <StyledTooltip title={"Click to Copy Meeting URL"}>
             <FileCopyOutlinedIcon className={classes.icon} onClick={copyToClipboard}/>
         </StyledTooltip>
     )

@@ -5,19 +5,16 @@ import { Box, makeStyles, Grid } from '@material-ui/core'
 import { useSelector } from "react-redux";
 import CloseIcon from '@material-ui/icons/Close';
 import VideoBox from "../../../../components/VideoBox";
-import { calculateRowsAndColumns, getLeftTop, isMobileOrTab, getRealParticipants} from "../../../../utils";
-import DrawerBox from '../../../../components/DrawerBox';
-import { color } from '../../../../assets/styles/_color';
-import { LIVE_STREAMING, PARTICIPANTS_VISIBLE_ON_MOBILE, VIDEO_CONFERENCING } from '../../../../constants';
-import StreamingUrls from '../../../MediaTypes/LiveStreaming/StreamingUrls';
-import StreamingPlayer from '../../../MediaTypes/LiveStreaming/StreamingPlayer';
+import { calculateRowsAndColumns, getLeftTop, getRealParticipants} from "../../../../utils";
+import { LIVE_STREAMING, VIDEO_CONFERENCING } from '../../../../constants';
+import useColor from '../../../../hooks/useColor';
 
 const ParticipantGrid = ({ dominantSpeakerId }) => {
     const [participantState, setParticipantState] = React.useState({
         right: false,
       });
     const layout = useSelector(state => state.layout);
-
+    const color = useColor();
     const useStyles = makeStyles((theme) => ({
         root: {
             justifyContent: "center",
@@ -137,11 +134,6 @@ const ParticipantGrid = ({ dominantSpeakerId }) => {
                     </>
                 )}
             </Grid>
-            {
-                mediaType === LIVE_STREAMING ? 
-                    <StreamingUrls />
-                : null
-            }
         </Box>
     );
 }

@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import { formatBytes } from '../../utils';
-import { color } from '../../assets/styles/_color';
 import { useLocation } from 'react-router-dom';
+import useColor from '../../hooks/useColor';
 
 
 
 const FileAttached = ({fileData, removeAttachment}) => {
     const location = useLocation();
     let isMesssaging = location.pathname.includes('/messaging');
-
+    const color = useColor();
     const useStyles = makeStyles((theme) => ({
         cb_attached: {
             display: 'flex',

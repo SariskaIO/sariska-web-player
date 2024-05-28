@@ -1,15 +1,15 @@
-import { Box, Button, Divider, Grid, TextField, Typography, makeStyles } from '@material-ui/core'
+import { Box, Button, Grid, TextField, Typography, makeStyles } from '@material-ui/core'
 import React, { useEffect, useRef, useState } from 'react'
-import { extractStreamFromUrl, getRandomColor, getToken, loadVideo } from '../../../../utils'
+import { extractStreamFromUrl, getToken, loadVideo } from '../../../../utils'
 import StreamingInfo from '../StreamingInfo'
 import './index.css';
 import ChatInfo from '../ChatInfo'
 import topbar from '../../../../utils/toolbar'
-import { color } from '../../../../assets/styles/_color'
 import { useSelector } from 'react-redux';
 import { WEBSOCKET_SERVICE_URL } from '../../../../constants';
 import { Socket } from 'phoenix';
 import Title from '../../../../components/Title';
+import useColor from '../../../../hooks/useColor';
 
 const StreamingPlayer = () => {
     const [chat, setChat] = useState(false);
@@ -20,6 +20,8 @@ const StreamingPlayer = () => {
     const profile = useSelector((state) => state.profile);
     const viewerCountRef = useRef(null);
     const {apiKey, isApiKey} = auth;
+    const color = useColor();
+    const theme = useSelector(state => state.theme)?.theme;
 
 
     const handleChat = async() => {
@@ -86,6 +88,7 @@ const StreamingPlayer = () => {
         let channel =  null;
         
         async function startChatApp(channelName) {
+            console.log('first startChatApp', socket);
             if (socket) {
                 socket.disconnect();
             }
@@ -109,11 +112,12 @@ const StreamingPlayer = () => {
         
             let userId = sessionStorage.getItem('sariska_live_streaming_userid');
             let userName = sessionStorage.getItem('sariska_live_streaming_username');
-            let token =  sessionStorage.getItem("SARISKA_STREAMING_TOKEN");            
+            let token =  sessionStorage.getItem("SARISKA_STREAMING_TOKEN");      
+            console.log('first tok', token)      
             if (token) {
                 return token;
             }
-        
+        console.log('sec', token)
             if (!userId || !userName) {
                 // If id or name doesn't exist, generate random strings
                 userId = generateRandomString();
@@ -123,8 +127,9 @@ const StreamingPlayer = () => {
                 sessionStorage.setItem('sariska_live_streaming_userid', userId);
                 sessionStorage.setItem('sariska_live_streaming_username', userName);
             }
-
-            socket = new Socket(WEBSOCKET_SERVICE_URL, {params: { token:  await getToken(profile, userName, profile?.color, isApiKey, apiKey, userId)}});
+            let isStreaming = true;
+            socket = new Socket(WEBSOCKET_SERVICE_URL, {params: { token:  await getToken(profile, userName, profile?.color, isApiKey, apiKey, userId, isStreaming)}});
+            console.log('socket', socket)
             // Connect to the socket:
             socket.onOpen = () => {
                 console.log("Socket opened", socket);
@@ -204,7 +209,7 @@ const StreamingPlayer = () => {
   <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
 </svg>
                                 <span style="position: absolute; left: 70px; top: 0; background: green" class="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
-                                <div style="color: white" class="font-medium dark:text-white">
+                                <div style="color: ${color.absoluteAAA}" class="font-medium dark:text-white">
                                     <div>${sanitizeString(name)}</div>
                                 </div>
                             </div>
@@ -217,7 +222,7 @@ const StreamingPlayer = () => {
 </svg>
 
                                 <span style="position: absolute; left: 70px; top: 0; background: green" class="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
-                                <div style="color: white; margin-left: 10px" class="font-medium dark:text-white">
+                                <div style="color: ${color.absoluteAAA}; margin-left: 10px" class="font-medium dark:text-white">
                                     <div>${sanitizeString(name)}</div>
                                 </div>
                             </div>
@@ -267,6 +272,7 @@ const StreamingPlayer = () => {
             // Send the message to the server on "shout" channel
             function sendMessage() {
                 let message =  msg.value
+                console.log('mess 1', message, channel)
                 let content_type = "text"
                 if (document.getElementById("fileUrl").value) {
                     message = document.getElementById("fileUrl").value;
@@ -303,6 +309,7 @@ const StreamingPlayer = () => {
         
             // Render the message with Tailwind styles
             function render_message(payload) {
+                console.log('redner', payload)
                 const li = document.createElement("li"); // create new list item DOM element
                 // Message HTML with Tailwind CSS Classes for layout/style:
         
@@ -315,14 +322,14 @@ const StreamingPlayer = () => {
                         ${payload.created_by_name}
                     </div>
                 </div>
-                <div style="max-width: 400px;text-align: left;margin-bottom: 10px; color: ${color.white}; margin-left: 46px" class="flex w-3/5 mx-1 grow">
+                <div style="max-width: 400px;text-align: left;margin-bottom: 10px; color: ${color.absoluteAAA}; margin-left: 46px" class="flex w-3/5 mx-1 grow">
                     <!-- Conditional rendering -->
                     ${payload.content_type === 'file' ? 
                         (payload.content.toLowerCase().endsWith('.png') || payload.content.toLowerCase().endsWith('.jpg') || payload.content.toLowerCase().endsWith('.jpeg') || payload.content.toLowerCase().endsWith('.gif') ?
-                            `<a href="${payload.content}" download="filename">
+                            `<a href="${payload.content}" download="filename" style="color: ${color.link}">
                                 <img src="${payload.content}" alt="File Image" style ="width: 85%">
                              </a>` :
-                            `<a href="${payload.content}" download="filename" style ="width: 85%">
+                            `<a href="${payload.content}" download="filename" style ="width: 85%; color: ${color.link}">
                                 ${payload.content}
                              </a>`) :
                         payload.content}
@@ -333,7 +340,7 @@ const StreamingPlayer = () => {
                 ul.appendChild(li);
                 scroll_latest_message_into_view();
             }
-        
+        console.log('list me', msg)
             // Listen for the [Enter] keypress event to send a message:
             msg && msg.addEventListener('keypress', function (event) {
                 if (event.keyCode == 13 && (msg.value.length > 0 || document.getElementById("fileUrl").value)) { // don't sent empty msg.
@@ -374,7 +381,7 @@ const StreamingPlayer = () => {
                 return str.trim();
             }
         }
-
+        
         useEffect(() => {
             loadVideo();
             //startChatApp(stream);
@@ -509,21 +516,21 @@ const StreamingPlayer = () => {
             },
             chat: {
                 textTransform: 'capitalize', 
-                background: chat ? color.primaryLight : '#fff', 
+                background: chat ? color.primaryLight : color.white1, 
                 color: chat ? color.white : 'inherit',
                 marginRight: '8px',
                 '&:hover': {
                     color: chat ? color.white : color.primaryLight,
-                    background: chat ? color.primaryLight : '#fff', 
+                    background: chat ? color.primaryLight : color.white1, 
                 }
             },
             online: {
                 textTransform: 'capitalize', 
-                background: online ? color.primaryLight : '#fff',
+                background: online ? color.primaryLight : color.white1,
                 color: online ? color.white : 'inherit',
                 '&:hover': {
                     color: online ? color.white : color.primaryLight,
-                    background: online ? color.primaryLight : '#fff', 
+                    background: online ? color.primaryLight : color.white1, 
                 }
             }
         }))
@@ -531,19 +538,19 @@ const StreamingPlayer = () => {
     const classes = useStyles();
 
   return (
-    <Box sx={{width: '100%', mt: 8}}>
+    <Box sx={{width: '100%', mt: 2}}>
         <Title title={'Play the Live Streaming URL'} isDivider={true} />
-        <Typography variant='h5' style={{color: color.white, textAlign: 'left', marginTop: '48px'}}> 
+        <Typography variant='h5' style={{color: color.white, textAlign: 'left', marginTop: '16px'}}> 
             Enter the Live Streaming Url:
         </Typography>
-    <Box sx={{display: 'flex', alignItems: 'center', width: '90%', mt: 1, mb: 6}}>
+    <Box sx={{display: 'flex', alignItems: 'center', width: '90%', mt: 1, mb: 1}}>
         <TextField variant='outlined' defaultValue={"https://vod.sariska.io/2544c8bed3a144eeb2b3163bf8cd0c4b/index.m3u8"} id="hlsUrlInput" placeholder='Enter Playback URL' className={classes.textField} />
         <Button onClick={loadHls} variant='contained' className={classes.play}>Play</Button>
     </Box>
-    <Grid container style={{marginTop: '84px', marginBottom: '36px'}}>
+    <Grid container style={{marginTop: '24px', marginBottom: '36px'}}>
         <Grid item md={8}>
         <Box>
-            <div id="player_container" ></div>
+            <div id="player_container" style={{borderRadius:'8px'}}></div>
             {/* <!-- Viewer count UI --> */}
             <div className="viewer-count" id="viewerCount" ref={viewerCountRef}>Currently Viewing: 0</div> 
         </Box>

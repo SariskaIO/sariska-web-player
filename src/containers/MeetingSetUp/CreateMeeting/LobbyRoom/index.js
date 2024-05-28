@@ -26,11 +26,11 @@ import SnackbarBox from "../../../../components/Snackbar";
 import { showNotification } from "../../../../store/actions/notification";
 import { setDisconnected } from "../../../../store/actions/layout";
 import FancyButton from '../../../../components/FancyButton';
-import { color } from "../../../../assets/styles/_color";
 import { setIsMeetingStarted } from "../../../../store/actions/auth";
 import SettingsBox from "../../../../components/Settings";
 import DrawerBox from "../../../../components/DrawerBox";
 import { VIDEO_CONFERENCING } from "../../../../constants";
+import useColor from "../../../../hooks/useColor";
 
 
 const LobbyRoom = ({ tracks }) => {
@@ -56,6 +56,7 @@ const LobbyRoom = ({ tracks }) => {
     right: false,
   });
   const moderator = useRef(true);
+  const color = useColor();
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -180,7 +181,7 @@ const LobbyRoom = ({ tracks }) => {
     if (!meetingTitle) {
       dispatch(
         showNotification({
-          message: "Meeting Title is required",
+          message: "Meeting Name is required",
           severity: "warning",
           autoHide: true,
         })
@@ -386,8 +387,8 @@ const LobbyRoom = ({ tracks }) => {
                   // //   );
                   // }
                 }}
-                label="Meeting Title"
-                placeholder="Enter Meeting title"
+                label="Meeting Name"
+                placeholder="Enter Meeting Name"
                 width="280px"
                 value={meetingTitle}
                 onChange={handleTitleChange}

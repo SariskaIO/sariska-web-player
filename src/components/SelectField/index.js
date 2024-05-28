@@ -1,48 +1,49 @@
 import React from 'react';
-import { color } from '../../assets/styles/_color';
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core";
+import useColor from '../../hooks/useColor';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1, 0),
-    minWidth: 320,
-    "& .MuiFormLabel-root": {
-      color: color.white
-    },
-    "& .MuiFormLabel-root.Mui-focused": {
-        color: color.white
-    },
-    "& .MuiInput-underline:before": {
-      borderBottom: `1px solid ${color.secondaryLight}`
-    },
-    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-      borderBottom: `1px solid ${color.white}`
-    },
-    "& .MuiInput-underline:after": {
-        borderBottom: `2px solid ${color.secondaryLight}`
-    },
-    "& .MuiInputBase-input": {
-        fontSize: '0.8rem',
-        color: color.white,
-        fontWeight: '900'
-    },
-    "& svg": {
-      color: color.secondaryLight
-    }
-    },
-    select: {
-      background: color.secondaryDark,
-      "& li": {
-        color: color.white,
-        "&:hover": {
-          background: color.secondary
-        }
-      }
-    }
-}));
 
 export default function SelectField({data, minWidth, width}) {
+  const color = useColor();
+  const useStyles = makeStyles((theme) => ({
+    formControl: {
+      margin: theme.spacing(1, 0),
+      minWidth: 320,
+      "& .MuiFormLabel-root": {
+        color: color.white
+      },
+      "& .MuiFormLabel-root.Mui-focused": {
+          color: color.white
+      },
+      "& .MuiInput-underline:before": {
+        borderBottom: `1px solid ${color.secondaryLight}`
+      },
+      "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+        borderBottom: `1px solid ${color.white}`
+      },
+      "& .MuiInput-underline:after": {
+          borderBottom: `2px solid ${color.secondaryLight}`
+      },
+      "& .MuiInputBase-input": {
+          fontSize: '0.8rem',
+          color: color.white,
+          fontWeight: '900'
+      },
+      "& svg": {
+        color: color.secondaryLight
+      }
+      },
+      select: {
+        background: color.secondaryDark,
+        "& li": {
+          color: color.white,
+          "&:hover": {
+            background: color.secondary
+          }
+        }
+      }
+  }));
   const classes = useStyles();
 
   return (

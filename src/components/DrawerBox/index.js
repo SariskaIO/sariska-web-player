@@ -1,15 +1,16 @@
 import React from "react";
-import { color } from "../../assets/styles/_color";
 import { ENTER_FULL_SCREEN_MODE } from "../../constants";
 import { useSelector } from "react-redux";
 import { Box, Drawer, makeStyles } from "@material-ui/core";
+import useColor from "../../hooks/useColor";
 
 
 export default function DrawerBox({ children, open, onClose, top }) {
   const layout = useSelector(state => state.layout);
+  const color = useColor();
   const useStyles = makeStyles((theme) => ({
     drawer: {
-      "& .MuiDrawer-paper": {
+      "& .MuiPaper-root.MuiDrawer-paper": {
         overflow: "hidden",
         top: top || "16px",
         bottom: "0px",
@@ -17,7 +18,7 @@ export default function DrawerBox({ children, open, onClose, top }) {
         borderRadius: "10px",
         height: (layout.mode === ENTER_FULL_SCREEN_MODE) || (window.innerHeight === 823 && window.innerWidth===1524) ? "97%" : "95%",
         width: "360px",
-        backgroundColor: color.secondary,
+        background: `${color.secondary} !important`,
         [theme.breakpoints.down("md")]: {
           top: '15px',
           //left: 0,
