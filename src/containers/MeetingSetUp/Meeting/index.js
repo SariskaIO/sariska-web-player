@@ -1,12 +1,9 @@
-import { Box, Divider, Grid, Typography, makeStyles } from "@material-ui/core";
+import { Box, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
-import { color } from "../../../assets/styles/_color";
 import ActionButtons from "./ActionButtons";
 import ReconnectDialog from "../../../components/ReconnectDialog";
 import { useSelector } from "react-redux";
 import GridLayout from "./GridLayout";
-// import SpeakerLayout from "../../../components/SpeakerLayout";
-// import PresentationLayout from "../../../components/PresentationLayout";
 import Notification from "../../../components/Notification";
 import {
   GRID,
@@ -20,6 +17,8 @@ import SnackbarBox from "../../../components/Snackbar";
 import { getRealParticipants } from "../../../utils";
 import StreamingPlayer from "../../MediaTypes/LiveStreaming/StreamingPlayer";
 import Title from "../../../components/Title";
+import useColor from "../../../hooks/useColor";
+import StreamingUrls from "../../MediaTypes/LiveStreaming/StreamingUrls";
 
 const Meeting = () => {
   const {dominantSpeakerId, lobbyUser, denyLobbyAccess, allowLobbyAccess} = useMeeting();
@@ -28,6 +27,7 @@ const Meeting = () => {
   const snackbar = useSelector((state) => state.snackbar);
   const conference = useSelector((state) => state.conference);
   const mediaType = useSelector((state) => state.media)?.mediaType;
+  const color = useColor();
   
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,7 +64,7 @@ const Meeting = () => {
         {
           mediaType === LIVE_STREAMING ? 
             <Grid item md={12} style={{marginBottom: '24px'}}>
-              <Title title={'Generate the Live Streaming URLs'} isDivider={true} />
+              <Title title={'Start streaming to get the live streaming URL'} isDivider={true} />
             </Grid> 
           : null
         }
@@ -88,6 +88,14 @@ const Meeting = () => {
           <ReconnectDialog open={layout.disconnected === "lost"} />
           <Notification snackbar={snackbar} />
         </Grid>
+
+        {
+          mediaType === LIVE_STREAMING ? 
+            <Grid item md={12} style={{marginBottom: '24px'}}>
+              <StreamingUrls />
+            </Grid>
+          : null
+            }
         {
             mediaType === LIVE_STREAMING ? 
                 <StreamingPlayer /> 

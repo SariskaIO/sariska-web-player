@@ -6,44 +6,44 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import {color} from "../../assets/styles/_color";
 import {makeStyles} from "@material-ui/core";
 import FancyButton from '../FancyButton';
+import useColor from '../../hooks/useColor';
 
-const useStyles = makeStyles((theme) => ({
-    dialog: {
-        "& .MuiPaper-root": {
-            background: color.secondary,
-            borderRadius: '7.5px',
-            color: color.white,
-            boxShadow: `0px 0px 1px 0px rgb(255 255 255 / 20%), 0px 1px 1px 1px rgb(255 255 255 / 14%), 0px 2px 4px 5px rgb(255 255 255 / 12%)`,
+export default function ReconnectDialog({open}) {
+    const color = useColor();
+    const useStyles = makeStyles((theme) => ({
+        dialog: {
+            "& .MuiPaper-root": {
+                background: color.secondary,
+                borderRadius: '7.5px',
+                color: color.white,
+                boxShadow: `0px 0px 1px 0px rgb(255 255 255 / 20%), 0px 1px 1px 1px rgb(255 255 255 / 14%), 0px 2px 4px 5px rgb(255 255 255 / 12%)`,
+                [theme.breakpoints.down("sm")]: {
+                    boxShadow: 'none'
+                }
+            },
+            "& p": {
+                color: color.white
+            },
             [theme.breakpoints.down("sm")]: {
+                height: '200px',
                 boxShadow: 'none'
             }
         },
-        "& p": {
-            color: color.white
+        anchor: {
+            color: color.secondary,
+            textDecoration: "none",
+            border: `1px solid ${color.primary}`,
+            padding: theme.spacing(1, 5),
+            borderRadius: "15px",
+            fontWeight: "900",
+            textTransform: "capitalize",
+            "&:hover": {
+                color: color.primary,
+            },
         },
-        [theme.breakpoints.down("sm")]: {
-            height: '200px',
-            boxShadow: 'none'
-        }
-    },
-    anchor: {
-        color: color.secondary,
-        textDecoration: "none",
-        border: `1px solid ${color.primary}`,
-        padding: theme.spacing(1, 5),
-        borderRadius: "15px",
-        fontWeight: "900",
-        textTransform: "capitalize",
-        "&:hover": {
-            color: color.primary,
-        },
-    },
-}));
-
-export default function ReconnectDialog({open}) {
+    }));
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));

@@ -3,13 +3,13 @@ import {compressFile, getPresignedUrl, getUniqueNumber} from '../../utils';
 import InsertPhotoOutlinedIcon from '@material-ui/icons/InsertPhotoOutlined';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { makeStyles, Tooltip } from '@material-ui/core';
-import { color } from '../../assets/styles/_color';
 import { useLocation } from 'react-router-dom';
+import useColor from '../../hooks/useColor';
 
 const FileUpload = ({ type, startFileUpload}) => {
     const location = useLocation();
     let isMesssaging = location.pathname.includes('/messaging');
-    
+    const color = useColor();
     const useStyles = makeStyles((theme) => ({
         labelHover: {
             '&:hover svg': {

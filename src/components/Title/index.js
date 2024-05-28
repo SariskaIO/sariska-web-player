@@ -1,8 +1,9 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import React from 'react'
-import { color } from '../../assets/styles/_color'
+import useColor from '../../hooks/useColor';
 
 const Title = ({title, isDivider}) => {
+    const color = useColor();
     const useStyles = makeStyles(() => ({
         root: {
             display: 'flex', 

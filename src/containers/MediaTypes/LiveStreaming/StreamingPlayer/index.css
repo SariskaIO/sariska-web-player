@@ -48,6 +48,9 @@ body {
     box-sizing: border-box;
 }
 
+#player_container.op-wrapper.ovenplayer {
+    border-radius: 8px;
+}
 
 #player_container video{
     border-radius: 8px;

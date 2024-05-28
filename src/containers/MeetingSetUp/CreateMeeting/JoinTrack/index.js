@@ -8,12 +8,12 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { color } from "../../../../assets/styles/_color";
 import VideoBox from "../../../../components/VideoBox";
 import Logo from "../../../../components/Logo";
 import StyledTooltip from "../../../../components/StyledTooltip";
 import { localTrackMutedChanged } from "../../../../store/actions/track";
 import { VIDEO_CONFERENCING } from "../../../../constants";
+import useColor from "../../../../hooks/useColor";
 
 const JoinTrack = ({ tracks, name, toggleSettingsDrawer, mediaType }) => {
   const videoTrack = tracks.find((track) => track && track.isVideoTrack());
@@ -21,6 +21,7 @@ const JoinTrack = ({ tracks, name, toggleSettingsDrawer, mediaType }) => {
   const {documentHeight, documentWidth} = {documentHeight: 240, documentWidth: 320};
   const bgColor = useSelector(state=>state.profile?.color);
   const dispatch = useDispatch();
+  const color = useColor();
 
 
   const unmuteAudioLocalTrack = async () => {
@@ -78,7 +79,7 @@ const JoinTrack = ({ tracks, name, toggleSettingsDrawer, mediaType }) => {
           fontSize: '150px'
       },
       "& svg": {
-          fontSize: "150px"
+          fontSize: "60px"
       },
       [theme.breakpoints.down("sm")]: {
         fontSize: '40px',

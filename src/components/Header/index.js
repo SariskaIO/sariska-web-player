@@ -1,54 +1,58 @@
 import React from 'react';
 import {Box, Button, Typography, makeStyles} from '@material-ui/core';
 import Logo from '../Logo';
-import { color } from '../../assets/styles/_color';
 import { useDispatch, useSelector } from 'react-redux';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import { setMediaType } from '../../store/actions/media';
 import { removeLocalTrack } from '../../store/actions/track';
-import { LIVE_STREAMING, VIDEO_CONFERENCING } from '../../constants';
+import { LIVE_STREAMING, MESSAGING, VIDEO_CONFERENCING } from '../../constants';
+import ThemeSwitch from '../ThemeSwitch';
+import useColor from '../../hooks/useColor';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex', 
-    alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'space-between'
-    }
-  },
-  titleContainer: {
-    flex: 1,
-    marginLeft: '-100px',
-    [theme.breakpoints.down('md')]: {
-      flex: 'none',
-      marginLeft: '16px',
-    }
-  },
-  title: {
-    fontWeight: '700', 
-    color: color.white,
-    [theme.breakpoints.down('md')]: {
-      fontSize: '1.7rem'
-    }
-  },
-  back: {
-    color: color.primaryLight,
-    borderColor: color.primaryLight,
-    textTransform: 'capitalize',
-    borderRadius: '20px',
-    marginLeft: '24px', 
-    fontSize: '2rem', 
-    lineHeight: 1,
-    '&:hover': {
-      opacity: 0.8
-    }
-  },
-  backIcon: {
-    fontSize: '1rem',
-    marginRight: '5px'
-  }
-}))
+
 const Header = () => {
+  const color = useColor();
+  const useStyles = makeStyles(theme => ({
+    root: {
+      display: 'flex', 
+      alignItems: 'center',
+      [theme.breakpoints.down('md')]: {
+        justifyContent: 'space-between'
+      }
+    },
+    titleContainer: {
+      flex: 1,
+      [theme.breakpoints.down('md')]: {
+        flex: 'none',
+        marginLeft: '16px',
+      }
+    },
+    title: {
+      fontWeight: '700', 
+      color: color.white,
+      [theme.breakpoints.down('md')]: {
+        fontSize: '1.7rem'
+      }
+    },
+    back: {
+      color: color.primaryLight,
+      borderColor: color.primaryLight,
+      textTransform: 'capitalize',
+      borderRadius: '20px',
+      marginLeft: '24px', 
+      marginRight: '24px', 
+      fontSize: '2rem', 
+      lineHeight: 1,
+      '&:hover': {
+        opacity: 0.8
+      }
+    },
+    backIcon: {
+      fontSize: '1rem',
+      marginRight: '5px'
+    }
+  }))
+
   const classes = useStyles();
   const mediaType = useSelector(state => state.media)?.mediaType;
   const localTracks = useSelector(state => state.localTrack);
@@ -72,6 +76,9 @@ const Header = () => {
       case LIVE_STREAMING:
         title = 'Interactive Live Streaming';
         break;
+      case MESSAGING:
+        title = 'Real Time Messaging';
+        break;
       default:
         title = 'Sariska Web Player';
     }
@@ -86,7 +93,9 @@ const Header = () => {
   
   return (
     <Box className={classes.root} style={{justifyContent: mediaType ? 'space-between' : 'inherit'}}>
-        <Logo />
+        <Box sx={{width: mediaType && !isMeetingStarted ? '172px' : '80px'}}>
+          <Logo />
+        </Box>
         {!mediaType ? <Box className={classes.titleContainer}>
             <Typography variant='h3' className={classes.title}>
               {getTitle()}
@@ -102,17 +111,23 @@ const Header = () => {
               <Typography variant='h5' className={classes.title} style={{textAlign: 'end'}}>
                 {getTitle()}
               </Typography>
-              {
-                !isMeetingStarted  ? 
-                <Button className={classes.back} variant= 'outlined' onClick={goBack} >
-                  <ArrowBackIosOutlinedIcon  className={classes.backIcon} />
-                  <Typography>Back</Typography>
-                </Button> 
-                : null
-              }
           </Box> 
           : null
         }
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
+        {
+          mediaType && !isMeetingStarted  ? 
+          <Button className={classes.back} variant= 'outlined' onClick={goBack} >
+            <ArrowBackIosOutlinedIcon  className={classes.backIcon} />
+            <Typography>Back</Typography>
+          </Button> 
+          : null
+        }
+        <Box sx={{width : !(mediaType && !isMeetingStarted) && '80px'}} >
+          <ThemeSwitch />
+        </Box>
+        </Box>
+      
     </Box>
   )
 }

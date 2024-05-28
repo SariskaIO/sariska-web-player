@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Button, Hidden, TextField, Typography, makeStyles } from '@material-ui/core'
-import { color } from '../../../assets/styles/_color';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsApiKeyRequired } from '../../../store/actions/auth';
+import useColor from '../../../hooks/useColor';
 
 const WithOrWithoutApiKey = ({isApiKey, apiKeyValue, handleChange, setIsApiKey, error, setError}) => {
-
+const color = useColor();
   const useStyles = makeStyles((theme)=>({
     inputContainer: {
         display: 'flex', 

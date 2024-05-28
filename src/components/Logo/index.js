@@ -1,14 +1,15 @@
 import { Box } from '@material-ui/core'
 import React from 'react'
-import { color } from '../../assets/styles/_color';
 import { makeStyles } from '@material-ui/core';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearAllReducers } from '../../store/actions/conference';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeLocalTrack } from '../../store/actions/track';
+import useColor from '../../hooks/useColor';
 
 const Logo = ({height}) => {
   const mediaType = useSelector(state => state.media)?.mediaType;
+  const color = useColor();
 
   const useStyles = makeStyles((theme)=>({
     logo: {

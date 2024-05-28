@@ -24,7 +24,6 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import classnames from "classnames";
 import DrawerBox from "../../components/DrawerBox";
 import CopyMeetingLink from "../../components/CopyMeetingLink";
-import { color } from '../../assets/styles/_color';
 import StyledTooltip from '../StyledTooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { addLocalTrack, localTrackMutedChanged, removeLocalTrack } from '../../store/actions/track';
@@ -34,23 +33,18 @@ import { unreadMessage } from '../../store/actions/chat';
 import ChatPanel from '../../containers/MeetingSetUp/Meeting/Chat';
 import { clearAllReducers } from '../../store/actions/conference';
 import { setIsMeetingStarted } from '../../store/actions/auth';
-import { STREAMING_TYPES, VIDEO_CONFERENCING } from '../../constants';
+import { LIVE_STREAMING, STREAMING_TYPES, VIDEO_CONFERENCING } from '../../constants';
 import DialogBox from '../DialogBox';
 import { showNotification } from '../../store/actions/notification';
 import { getObjectKeysLength, startStreamingInSRSMode, stopStreamingInSRSMode } from '../../utils';
 import { setStreamingUrls } from '../../store/actions/media';
+import useColor from '../../hooks/useColor';
 
-const StyledBadge = withStyles((theme) => ({
-    badge: {
-      background: color.primary,
-      top: 6,
-      right: 10,
-    },
-  }))(Badge);
 
 
 const ToolBox = () => {
     const dispatch = useDispatch();
+    const color = useColor();
     const conference = useSelector((state) => state.conference);
     const localTracks = useSelector((state) => state.localTrack);
     const profile = useSelector((state) => state.profile);
@@ -165,9 +159,7 @@ const ToolBox = () => {
             <Typography variant="h6" className={classes.title}>
               Messages
             </Typography>
-            <Hidden mdUp>
-              <CloseIcon onClick={toggleChatDrawer("right", false)}/>
-            </Hidden>
+            <CloseIcon onClick={toggleChatDrawer("right", false)}/>
           </Box>
           <ChatPanel />
         </>
@@ -243,10 +235,28 @@ const ToolBox = () => {
           }
       };
       
-      const leaveConference = () => {
+      const leaveConference = async() => {
+        if(mediaType === LIVE_STREAMING) {
+          conference.getParticipantsWithoutHidden().forEach(async(item)=>{
+            if (!item._properties?.streaming) {
+                return;
+            }
+            else{
+              await stopStreaming();
+            }
+          })
+        }
         dispatch(clearAllReducers());
         dispatch(setIsMeetingStarted(false))
       };
+
+      const StyledBadge = withStyles((theme) => ({
+        badge: {
+          background: color.primary,
+          top: 6,
+          right: 10,
+        },
+      }))(Badge);
 
       const useStyles = makeStyles((theme) => ({
         active: {
@@ -296,15 +306,17 @@ const ToolBox = () => {
           alignItems: 'center'
         },
         end: {
-          background: `${color.red} !important`,
-          borderColor: `${color.red} !important`,
-          padding: "2px 12px !important",
+          color: `${color.red} !important`,
+          border: `1px solid ${color.red} !important`,
+          
+          padding: "2px 24px !important",
           textAlign: "center",
           borderRadius: "30px !important",
-          width: "42px",
+         // width: "42px",
           fontSize: "36px",
           marginRight: 0,
-          marginLeft: mediaType && '16px',
+          marginTop: '24px',
+         // marginLeft: mediaType && '16px',
           "&:hover": {
             opacity: "0.8",
             background: `${color.red} !important`,
@@ -337,6 +349,29 @@ const ToolBox = () => {
             backgroundColor: color.secondary,
             overflowY: "auto",
           },
+        },
+        participantHeader: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          "& svg": {
+            color: color.white,
+            '&:hover': {
+              cursor: 'pointer'
+            }
+          }
+        },
+
+        title: {
+          color: color.white,
+          fontWeight: "400",
+          marginLeft: "8px",
+          fontSize: "28px",
+          lineHeight: "1",
+          [theme.breakpoints.down("sm")]: {
+            marginLeft: 0,
+            fontSize: '24px'
+          }
         },
         chat: {
           marginRight: "0px !important",
@@ -428,7 +463,7 @@ const ToolBox = () => {
             <PanToolIcon onClick={startRaiseHand} className={classes.panTool} />
           )}
         </StyledTooltip>
-        <CopyMeetingLink textToCopy={profile.meetingTitle} />
+        <CopyMeetingLink textToCopy={`https://meet.sariska.io/${profile.meetingTitle}`} isBorder={true} />
         {/* <Hidden smDown>
           <StyledTooltip title="Participants Details">
             <GroupIcon onClick={toggleParticipantDrawer("right", true)} />
@@ -507,17 +542,23 @@ const ToolBox = () => {
         </>
         :
         <Box className={classes.permissions}>
-            <Box className={classes.iconContainer}>
+            {/* <Box className={classes.iconContainer}>
                 <CopyMeetingLink textToCopy={profile.meetingTitle} />
-                <StyledTooltip title="Leave Call">
-                    <CallEndIcon onClick={leaveConference} className={classes.end} />
-                </StyledTooltip>
-            </Box>
-
-                <Box className={ classes.liveBox} onClick={ streamingUrlsArrayLength ? stopStreaming : handleOpenStreamingMenu }>          
+            </Box> */}
+                <Box 
+                  className={ classes.liveBox} 
+                  onClick={ streamingUrlsArrayLength ? stopStreaming : handleOpenStreamingMenu }
+                >          
                     {/* <FiberManualRecordIcon className={classes.dot} /> */}
-                    <Button className={classes.live}>{streamingUrlsArrayLength ? 'Stop Streaming' : 'Start Streaming'}</Button>
+                <Button className={classes.live}>
+                  {streamingUrlsArrayLength ? 'Stop Streaming' : 'Start Streaming'}
+                </Button>
                 </Box>
+
+                <Button className={classes.end} onClick={leaveConference} >
+                    <CallEndIcon style={{padding: '2px', marginRight: '12px', border: 'none'}} />
+                    <Typography> End Call </Typography>
+                </Button>
             <DialogBox 
                 open={openStreamingMenu} 
                 handleOpen={handleOpenStreamingMenu} 

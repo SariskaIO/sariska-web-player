@@ -1,5 +1,5 @@
 import { Box, makeStyles } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfile } from '../../store/actions/profile';
@@ -10,6 +10,7 @@ import cobrowsing from '../../assets/images/Cobrowsing.svg';
 
 import { setApiKey } from '../../store/actions/auth';
 import { LIVE_STREAMING, MESSAGING, VIDEO_CONFERENCING, CO_BROWSING } from '../../constants';
+import useColor from '../../hooks/useColor';
 import MediaSetUp from '../../containers/MediaSetUp';
 import MediaTypes from '../../containers/MediaTypes';
 
@@ -22,9 +23,13 @@ const Home = () => {
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
     const mediaType = useSelector(state => state.media)?.mediaType;
+    const color = useColor();
 
     const useStyles = makeStyles((theme)=>({
         root: {
+            background: color.secondaryDark,
+        },
+        container: {
             padding: ' 16px 32px', 
             textAlign: 'center',
             [theme.breakpoints.down('md')]: {
@@ -43,29 +48,38 @@ const Home = () => {
         setNext(false);
         setError(null);
     }
+
+    useEffect(() => {
+        document.body.style.backgroundColor = color.secondaryDark; // Set your desired color here
+    
+        // Cleanup to reset the background color when the component unmounts
+        return () => {
+          document.body.style.backgroundColor = '';
+        };
+      }, [color]);
     
   return (
-        <Box className={classes.root}>
-            <Header />
-            {
-                !mediaType ? (
-                    <MediaSetUp 
-                        isApiKey={isApiKey} 
-                        apiKeyValue={apiKeyValue} 
-                        handleChange={handleChange} 
-                        next={next} 
-                        setNext={setNext} 
-                        setIsApiKey={setIsApiKey} 
-                        error={error} 
-                        setError={setError} 
-                        list={list}
-                    />)
-                :
-                <MediaTypes 
-                
-                />
-            }
-        </Box>
+        <div className={classes.root}>
+            <Box className={classes.container}>
+                <Header />
+                {
+                    !mediaType ? (
+                        <MediaSetUp 
+                            isApiKey={isApiKey} 
+                            apiKeyValue={apiKeyValue} 
+                            handleChange={handleChange} 
+                            next={next} 
+                            setNext={setNext} 
+                            setIsApiKey={setIsApiKey} 
+                            error={error} 
+                            setError={setError} 
+                            list={list}
+                        />)
+                    : 
+                    <MediaTypes />
+                }
+            </Box>
+        </div>
   )
 }
 

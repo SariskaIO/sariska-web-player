@@ -12,9 +12,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-        {/* <Route path='/video-conferencing' element={<VideoConferencing />} />
-        <Route path='/video-conferencing/:meetingId' element={<VCMeeting />} />
-        <Route path='/leave/:id' element={<Leave />} /> */}
+        <Route path='*' element={
+          <Navigate to='/' replace />
+        } />
       </Routes>
     </BrowserRouter>
   );

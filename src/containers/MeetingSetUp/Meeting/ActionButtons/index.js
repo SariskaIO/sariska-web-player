@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import SariskaMediaTransport from "sariska-media-transport";
-import { color } from "../../../../assets/styles/_color";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CallEndIcon from "@material-ui/icons/CallEnd";
@@ -53,8 +52,9 @@ import StyledTooltip from "../../../../components/StyledTooltip";
 //import LiveStreamingDetails from "../LiveStreamingDetails";
 import { showNotification } from "../../../../store/actions/notification";
 import googleApi from "../../../../utils/google-apis";
-import { setIsMeetingStarted } from "../../../../store/actions/auth";
 import ToolBox from "../../../../components/ToolBox";
+import useColor from "../../../../hooks/useColor";
+import CopyMeetingLink from "../../../../components/CopyMeetingLink";
 //import LiveStreamDialog from "../LiveStreamDialog";
 
 
@@ -62,8 +62,10 @@ import ToolBox from "../../../../components/ToolBox";
 
 
 const ActionButtons = ({ dominantSpeakerId }) => {
+  const color = useColor();
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const theme = useSelector(state => state.theme)?.theme;
   const conference = useSelector((state) => state.conference);
   const mediaType = useSelector((state) => state.media)?.mediaType;
   const profile = useSelector((state) => state.profile);
@@ -643,14 +645,16 @@ const ActionButtons = ({ dominantSpeakerId }) => {
       width: 'fit-content',
       padding: mediaType === VIDEO_CONFERENCING ? '32px' : '18px 32px',
       display: "flex",
-      border: `1px solid ${color.secondary}`,
+      border: `1px solid ${theme === 'dark' ? color.secondary : color.whitePointOne}`,
       borderRadius: '8px',
       justifyContent: "space-around",
       flexDirection: 'column',
       alignItems: "center"
     },
     infoContainer: {
-      display: "flex"
+      display: "flex",
+      alignItems: 'center',
+      justifyContent: 'space-around'
     },
     title: {
       color: color.white,
@@ -680,8 +684,13 @@ const ActionButtons = ({ dominantSpeakerId }) => {
       <Box className={classes.actionContainer}>
       <Box sx={{display: 'flex', alignItems: 'center'}}>
         <Box className={classes.infoContainer}>
-          <Typography variant="h6">Meeting Title : &nbsp;</Typography>
-          <Typography style={{color: color.primaryLight, fontSize: '1.4rem'}}>{profile.meetingTitle}</Typography>
+          <Box sx={{display: 'flex', alignItems: 'center'}}>
+            <Typography variant="h6"><b>Meeting Title : &nbsp;</b></Typography>
+            <Typography style={{ fontSize: '1.4rem'}}>{profile.meetingTitle}</Typography>
+          </Box>
+          {mediaType === LIVE_STREAMING && <Box sx={{display: 'flex', ml: 3, color: color.primaryLight}}>
+              <CopyMeetingLink textToCopy={`https://meet.sariska.io/${profile.meetingTitle}`} isBorder={false} />
+          </Box>}
         </Box>
       </Box>
       {/* <LiveStreamDialog

@@ -6,7 +6,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import { color } from "../../assets/styles/_color";
 import Video from "../Video";
 import Audio from "../Audio";
 import PanTool from "@material-ui/icons/PanTool";
@@ -21,6 +20,7 @@ import AudioLevelIndicator from "../AudioIndicator";
 //import SubTitle from "../SubTitle";
 //import { useDocumentSize } from "../../hooks/useDocumentSize";
 import { profile } from "../../store/reducers/profile";
+import useColor from "../../hooks/useColor";
 
 const VideoBox = ({
   participantTracks,
@@ -35,7 +35,7 @@ const VideoBox = ({
   isTranscription,
   numParticipants
 }) => {
-    
+    const color = useColor();
   const useStyles = makeStyles((theme) => ({
     root: {
       position: "relative",
@@ -48,7 +48,7 @@ const VideoBox = ({
       "& .largeVideo": {
         height: theme.spacing(20),
         width: theme.spacing(20),
-        fontSize: "40pt",
+        fontSize: "20pt",
       },
       [theme.breakpoints.down("sm")]: {
           background: numParticipants>1 ? color.secondary : "transparent",
@@ -124,7 +124,7 @@ const VideoBox = ({
       transition: "box-shadow 0.3s ease",
       height: numParticipants === 1 ? theme.spacing(20) : theme.spacing(10),
       width: numParticipants === 1 ? theme.spacing(20) :theme.spacing(10),
-      fontSize: numParticipants ===1 && '40pt'
+      fontSize: numParticipants ===1 && '20pt'
     },
     rightControls: {
       display: "flex",

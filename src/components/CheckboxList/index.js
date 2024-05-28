@@ -5,8 +5,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import { color } from '../../assets/styles/_color';
 import { STREAMING_TYPES } from '../../constants';
+import useColor from '../../hooks/useColor';
+
+export default function CheckboxList({value, handleChange}) {
+  const color = useColor();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
 })); 
-
-export default function CheckboxList({value, handleChange}) {
   const classes = useStyles();
 
   return (

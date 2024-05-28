@@ -64,14 +64,14 @@ export function createDeferred() {
     return deferred;
 }
 
-export async function getToken(profile, name, avatarColor, isApiKey, apiKey, id) {
+export async function getToken(profile, name, avatarColor, isApiKey, apiKey, id, isStreaming) {
     const body = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            apiKey: isApiKey ?apiKey : process.env.REACT_APP_SARISKA_MEET_APP_API_KEY,
+            apiKey: isApiKey ? apiKey : process.env.REACT_APP_SARISKA_MEET_APP_API_KEY,
             user: {
                 avatar: avatarColor,
                 name: name,
@@ -88,6 +88,9 @@ export async function getToken(profile, name, avatarColor, isApiKey, apiKey, id)
         if (response.ok) {
             const json = await response.json();
             localStorage.setItem("SARISKA_TOKEN", json.token);
+            if(isStreaming){
+                sessionStorage.setItem("SARISKA_STREAMING_TOKEN", json.token);    
+            } 
             return json.token;
         } else {
             console.log(response.status);
